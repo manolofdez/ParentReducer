@@ -5,22 +5,30 @@ A [Composable Architecture](https://github.com/pointfreeco/swift-composable-arch
 With TCA you have a few ways of updating the state of another reducer. For example, you can: 
 
 A. Manipulate the state directly:
-<div>`state.child.theirVariable = "foo"`</div>
+```swift
+state.child.theirVariable = "foo"
+```
 
 B. Recreate the child's state:
-<div>`state.child = ChildReducer.State(theirVariable: "foo")`</div>
+```swift
+state.child = ChildReducer.State(theirVariable: "foo")
+```
 
 c) Reduce the state: 
 
 	ChildReducer()
-      .reduce(into: &state.childState, action: .theirValue("foo"))
+      .reduce(into: &state.child, action: .theirValue("foo"))
       .map { .child($0) }
 
 etc...
 
 I've gravitated towards option C, the most verbose, because it helps me make the mental model that "only a Reducer knows how to mutate its state". This helps me draw a boundary around how these elements are expected to interact. BUT, as I alluded to before, this is VERY verbose.
 
-The `ParentReducer` macro hopes to alleviate the verbosity of reducing a child reducer's state by allowing you to mutate the child directly from the parent's state, using the child reducer's actions.
+The `ParentReducer` macro hopes to alleviate the verbosity of reducing a child reducer's state by allowing you to mutate the child directly from the parent's state, using the child reducer's actions. At the call site, it ends up looking like this:
+
+```swift
+return state.child(.theirValue("foo"))
+```
 
 ## Usage
 
