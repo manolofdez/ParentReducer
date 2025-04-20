@@ -25,7 +25,7 @@ extension ParentReducerMacro: MemberAttributeMacro {
         else {
             return []
         }
-        let attributeName = IdentifierTypeSyntax(name: .identifier("ParentReducerState(of: \(reducerTypeName))"))
+        let attributeName = IdentifierTypeSyntax(name: .identifier("ParentReducerState(of: \(reducerTypeName).self)"))
         return [AttributeSyntax(attributeName: attributeName)]
     }
 }

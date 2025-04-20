@@ -18,10 +18,12 @@ extension ParentReducerStateMacro: MemberMacro {
         guard let parentReducerTypeName = {
             guard let arguments = node.arguments?.as(LabeledExprListSyntax.self),
                   let argument = arguments.first(where: { $0.label?.text == "of" }),
-                  let expression = argument.expression.as(DeclReferenceExprSyntax.self) else {
+                  let expression = argument.expression.as(MemberAccessExprSyntax.self),
+                  let baseExpression = expression.base?.as(DeclReferenceExprSyntax.self)
+            else {
                 return String?.none
             }
-            return expression.baseName.text
+            return baseExpression.baseName.text
         }() else {
             return []
         }
